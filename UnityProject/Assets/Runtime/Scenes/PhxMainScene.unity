@@ -419,7 +419,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Settings:
-    GamePathString: 
+    GamePathString: C:\Program Files (x86)\steam\steamapps\Star Wars Battlefront
+      II
     Language: english
     BootMode: 0
     BootSWBF2Map: kas2c_con
@@ -442,7 +443,7 @@ MonoBehaviour:
   HUDPrefab: {fileID: 7293890149350655508, guid: 694c8bdb39040774686521aa6d278167, type: 3}
   BoltPrefab: {fileID: 6623684661408825687, guid: 8cbe153bab125594c866af47d533539f, type: 3}
   BeamPrefab: {fileID: -7815452322436354814, guid: a96069e94b7e39541a586f7d9be2b127, type: 3}
-  MissionListPath: 
+  MissionListPath: C:\BF2_ModTools\assets\Shell\scripts\missionlist.lua
 --- !u!4 &1641162174
 Transform:
   m_ObjectHideFlags: 0
