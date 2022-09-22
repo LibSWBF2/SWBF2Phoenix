@@ -284,7 +284,7 @@ public class PhxCommandpost : PhxInstance<PhxCommandpost.ClassProperties>, IPhxT
         }
         if (Match.Teams[Team].Hologram == null) { LoadIcon(ref Match.Teams[Team].Hologram); }
 
-        HoloIcon.LoadIcon(Match.GetTeamHologram(Team), Team);
+        HoloIcon?.LoadIcon(Match.GetTeamHologram(Team), Team);
 
         if (HoloIcon != null)
             HoloIcon.Show();
@@ -299,7 +299,7 @@ public class PhxCommandpost : PhxInstance<PhxCommandpost.ClassProperties>, IPhxT
         }
         if (Match.Teams[Team].Hologram == null) { LoadIcon(ref Match.Teams[Team].Hologram); }
 
-        HoloIcon.ChangeColorIcon(Team);
+        HoloIcon?.ChangeColorIcon(Team);
 
         if(HoloIcon!=null)
             HoloIcon.Show();
