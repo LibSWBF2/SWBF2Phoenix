@@ -178,7 +178,7 @@ public class PhxScene
     }
 
 
-    public void FireProjectile(IPhxWeapon WeaponOfOrigin, 
+    public void FireProjectile(IPhxWeapon WeaponOfOrigin,
                                 PhxOrdnanceClass OrdnanceClass,
                                 Vector3 Pos, Quaternion Rot)
     {
@@ -275,7 +275,7 @@ public class PhxScene
             WorldRoots.Add(worldRoot);
         }
 
-        Animator.InitializeWorldAnimations(worldLayers);        
+        Animator.InitializeWorldAnimations(worldLayers);
     }
 
     public SWBFPath GetPath(string pathName)
@@ -305,7 +305,7 @@ public class PhxScene
     }
 
     // TODO: implement object pooling
-    public PhxInstance CreateInstance(PhxClass cl, string instName, Vector3 position, Quaternion rotation, bool withCollision=true, Transform parent =null)
+    public PhxInstance CreateInstance(PhxClass cl, string instName, Vector3 position, Quaternion rotation, bool withCollision = true, Transform parent = null)
     {
         return CreateInstance(cl.EntityClass, instName, position, rotation, withCollision, parent).GetComponent<PhxInstance>();
     }
@@ -484,15 +484,22 @@ public class PhxScene
         List<GameObject> instanceObjects = new List<GameObject>();
         foreach (Instance inst in instances)
         {
-            GameObject instGO = CreateInstance(
-                inst,
-                inst.Name,
-                UnityUtils.Vec3FromLibWorld(inst.Position),
-                UnityUtils.QuatFromLibWorld(inst.Rotation)
-            );
-            if (instGO != null)
+            try
             {
-                instanceObjects.Add(instGO);
+                GameObject instGO = CreateInstance(
+                    inst,
+                    inst.Name,
+                    UnityUtils.Vec3FromLibWorld(inst.Position),
+                    UnityUtils.QuatFromLibWorld(inst.Rotation)
+                );
+                if (instGO != null)
+                {
+                    instanceObjects.Add(instGO);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to create {inst.Name}: " + e);
             }
         }
         return instanceObjects;
@@ -512,7 +519,7 @@ public class PhxScene
                 closestDistance = info.distance;
             }
 
-            CPCamPositions.Add(CommandPosts[i], new PhxTransform 
+            CPCamPositions.Add(CommandPosts[i], new PhxTransform
             {
                 Position = t.position + direction * closestDistance,
                 Rotation = Quaternion.LookRotation(-direction, Vector3.Cross(right, -direction))
