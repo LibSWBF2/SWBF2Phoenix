@@ -4,6 +4,7 @@ using UnityEngine;
 using LibSWBF2;
 using LibSWBF2.Enums;
 using LibSWBF2.Wrappers;
+using UnityEditor;
 
 
 /*
@@ -510,7 +511,11 @@ public class PhxEnvironment
         // 1 - execute the main script
         if (!string.IsNullOrEmpty(InitScriptName) && !Execute(InitScriptName))
         {
-            Debug.LogErrorFormat("Executing lua main script '{0}' failed!", InitScriptName);
+            Debug.LogErrorFormat("Executing lua main script '{0}' failed! Closing application.", InitScriptName);
+            #if UNITY_EDITOR
+            EditorApplication.ExitPlaymode();
+            #endif
+            Application.Quit(1);
             return;
         }
         OnExecuteMain?.Invoke();
