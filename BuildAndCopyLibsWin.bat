@@ -70,23 +70,28 @@ if '%choice%'=='' (
 
 :Start
 
-cmake -S "LibSWBF2/LibSWBF2" -B "LibSWBF2/LibSWBF2/build"
-cmake --build "LibSWBF2/LibSWBF2/build" --target ALL_BUILD --parallel --clean-first --config %mode% -- -verbosity:minimal -maxcpucount:%numThreads%
+cmake -S "./LibSWBF2/LibSWBF2" -B "./LibSWBF2/LibSWBF2/build" -G "Visual Studio 17 2022" -A x64
+cmake --build "./LibSWBF2/LibSWBF2/build" --target ALL_BUILD --parallel --clean-first --config %mode% -- -verbosity:minimal -maxcpucount:%numThreads%
 
-"%MsBuild%" LibSWBF2\LibSWBF2.NET\LibSWBF2.NET.csproj -verbosity:minimal /t:Rebuild /p:Platform="x64" /p:DefineConstants=WIN32 /p:configuration=%mode%
-"%MsBuild%" lua5.0-swbf2-x64\mak.vs2019\lua50_dll.vcxproj -verbosity:minimal /t:Rebuild /p:Platform="x64" /p:configuration=%mode%
+rem restore .NET nuget packages (.NET standard 2.0)
+pushd .\LibSWBF2\LibSWBF2.NET
+dotnet restore
+popd
+
+"%MsBuild%" .\LibSWBF2\LibSWBF2.NET\LibSWBF2.NET.csproj -verbosity:minimal /t:Rebuild /p:Platform="x64" /p:DefineConstants=WIN32 /p:configuration=%mode%
+"%MsBuild%" .\lua5.0-swbf2-x64\mak.vs2022\lua50_dll.vcxproj -verbosity:minimal /t:Rebuild /p:Platform="x64" /p:configuration=%mode%
 
 rem Copy built binaries to Unity project
-copy "LibSWBF2\LibSWBF2\build\%mode%\LibSWBF2.dll" "UnityProject\Assets\Lib\LibSWBF2.dll" /Y
-copy "LibSWBF2\LibSWBF2.NET\bin\x64\%mode%\netstandard2.0\LibSWBF2.NET.dll" "UnityProject\Assets\Lib\LibSWBF2.NET.dll" /Y
-copy "lua5.0-swbf2-x64\bin\x64\%mode%\lua50-swbf2-x64.dll" "UnityProject\Assets\Lib\lua50-swbf2-x64.dll" /Y
+copy ".\LibSWBF2\LibSWBF2\build\%mode%\LibSWBF2.dll" ".\UnityProject\Assets\Lib\LibSWBF2.dll" /Y
+copy ".\LibSWBF2\LibSWBF2.NET\bin\x64\%mode%\netstandard2.0\LibSWBF2.NET.dll" ".\UnityProject\Assets\Lib\LibSWBF2.NET.dll" /Y
+copy ".\lua5.0-swbf2-x64\bin\x64\%mode%\lua50-swbf2-x64.dll" ".\UnityProject\Assets\Lib\lua50-swbf2-x64.dll" /Y
 
 rem Copy debug database when in Debug mode, delete it otherwise
 if '%mode%'=='Debug' (
-    copy "LibSWBF2\LibSWBF2.NET\bin\x64\%mode%\netstandard2.0\LibSWBF2.NET.pdb" "UnityProject\Assets\Lib\LibSWBF2.NET.pdb" /Y
+    copy ".\LibSWBF2\LibSWBF2.NET\bin\x64\%mode%\netstandard2.0\LibSWBF2.NET.pdb" ".\UnityProject\Assets\Lib\LibSWBF2.NET.pdb" /Y
 ) else (
     rem Delete file without error message (in case it doesn't exist)
-    del "UnityProject\Assets\Lib\LibSWBF2.NET.pdb" 2>nul
+    del ".\UnityProject\Assets\Lib\LibSWBF2.NET.pdb" 2>nul
 )
 
 echo Done
